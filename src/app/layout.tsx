@@ -17,7 +17,7 @@ const RootLayout = ({
     children: React.ReactNode;
 }>) => {
     return (
-        <html lang="en">
+        <html lang="ko">
             <body className={`${pretendard.className}`}>{children}</body>
         </html>
     );
