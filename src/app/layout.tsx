@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
+import Provider from "@/components/common/Provider";
+import Header from "@/components/header/Header";
+
 const pretendard = localFont({
     src: "./fonts/Pretendard-Regular.woff2",
 });
@@ -18,7 +21,12 @@ const RootLayout = ({
 }>) => {
     return (
         <html lang="ko">
-            <body className={`${pretendard.className}`}>{children}</body>
+            <body className={`${pretendard.className} w-5/6 mx-auto 2xl:w-3/6`}>
+                <Provider attribute="class" defaultTheme="system" enableSystem>
+                    <Header />
+                    {children}
+                </Provider>
+            </body>
         </html>
     );
 };
