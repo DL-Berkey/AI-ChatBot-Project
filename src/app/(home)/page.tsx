@@ -3,8 +3,12 @@
 import { useState } from "react";
 
 import { sample } from "@/action/clova";
+import { sendMessageToOpenAI } from "@/action/openai";
+import { OpenAI_Messages } from "@/types";
 
 const Home = () => {
+    const [conversation, setConversation] = useState<OpenAI_Messages>([]);
+
     const [value, setValue] = useState("");
 
     const [answer, setAnswer] = useState("");
@@ -18,15 +22,33 @@ const Home = () => {
             />
             <button
                 onClick={async () => {
-                    const res = await sample(value);
-                    console.groupCollapsed("🚀 ~", res);
+                    const res = await sendMessageToOpenAI([
+                        ...conversation,
+                        { role: "user", content: value },
+                    ]);
 
-                    setAnswer(res.content[0].data.details);
+                    setConversation((prev) => {
+                        return [
+                            ...prev,
+                            { role: "user", content: value },
+                            { role: "assistant", content: res! },
+                        ];
+                    });
+
+                    setAnswer(res!);
                 }}
             >
                 Click Me!
             </button>
-            <div>대답: {answer}</div>
+            <div>
+                <ul>
+                    {conversation.map((value, idx) => {
+                        if (typeof value.content === "string") {
+                            return <li key={idx}>{value.content}</li>;
+                        }
+                    })}
+                </ul>
+            </div>
         </div>
     );
 };
