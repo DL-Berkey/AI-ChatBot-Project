@@ -7,7 +7,7 @@ type Props = {
 };
 
 const Home = async ({ searchParams }: Props) => {
-    const page = (await searchParams).page;
+    const page = Number((await searchParams).page);
 
     return (
         <main className="mt-10">
