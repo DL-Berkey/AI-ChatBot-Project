@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 import { LoginData } from "@/types";
 import { createClient } from "@/lib/supabase/server";
 
@@ -50,7 +52,7 @@ export const login = async ({ id, password }: LoginData) => {
         return null;
     }
 
-    // acount_id는 unique임
+    // account_id는 unique임
     const { data: loginData, error } = await client.auth.signInWithPassword({
         email: data[0].email,
         password,
@@ -63,8 +65,30 @@ export const login = async ({ id, password }: LoginData) => {
     return loginData.user;
 };
 
-export const findid = async ({ id, password }: LoginData) => {
+export const logout = async () => {
     const client = await createClient();
+
+    await client.auth.signOut();
+
+    revalidatePath("/");
+};
+
+export const findId = async ({ id, password }: LoginData) => {
+    const client = await createClient();
+};
+
+export const getUserData = async () => {
+    const client = await createClient();
+    const {
+        data: { user },
+        error,
+    } = await client.auth.getUser();
+
+    if (error) {
+        return null;
+    }
+
+    return user;
 };
 
 /**
