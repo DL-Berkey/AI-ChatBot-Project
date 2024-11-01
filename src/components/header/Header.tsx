@@ -15,8 +15,8 @@ const Header = () => {
             </div>
             <div className="flex items-center gap-4">
                 <ThemeButton />
-                <Button className="bg-main text-white font-semibold text-sm p-2">
-                    <Link href="/">로그인</Link>
+                <Button className="p-2 text-sm font-semibold text-white bg-main">
+                    <Link href="/login">로그인</Link>
                 </Button>
             </div>
         </header>

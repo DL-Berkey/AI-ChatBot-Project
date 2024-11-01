@@ -7,3 +7,8 @@ export type OpenAI_Messages =
     OpenAI.Chat.Completions.ChatCompletionMessageParam[];
 
 export type RoomData = Database["public"]["Tables"]["ConversationRoom"];
+
+export type LoginData = {
+    id: string;
+    password: string;
+};

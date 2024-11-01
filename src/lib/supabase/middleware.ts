@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { CookieToSet } from "./server";
 
-export async function updateSession(request: NextRequest) {
+export const updateSession = async (request: NextRequest) => {
     let supabaseResponse = NextResponse.next({
         request,
     });
@@ -47,4 +47,4 @@ export async function updateSession(request: NextRequest) {
     // }
 
     return supabaseResponse;
-}
+};

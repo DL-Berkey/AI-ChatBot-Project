@@ -58,6 +58,33 @@ export type Database = {
         }
         Relationships: []
       }
+      UserAccount: {
+        Row: {
+          account_id: string
+          auth_id: string
+          created_at: string
+          email: string
+          id: number
+          updated_at: string
+        }
+        Insert: {
+          account_id?: string
+          auth_id?: string
+          created_at?: string
+          email?: string
+          id?: number
+          updated_at?: string
+        }
+        Update: {
+          account_id?: string
+          auth_id?: string
+          created_at?: string
+          email?: string
+          id?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
