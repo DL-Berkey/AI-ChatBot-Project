@@ -1,43 +1,69 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 import { LoginData } from "@/types";
 import { createClient } from "@/lib/supabase/server";
 
 export const register = async ({
+    nickname,
     email,
+    id,
     password,
-}: LoginData & { email: string }) => {
+}: LoginData & { nickname: string; email: string }) => {
     const client = await createClient();
 
-    const { data, error } = await client.auth.signUp({
+    const { data, error: signUpError } = await client.auth.signUp({
         email,
         password,
         options: {
             data: {
-                displayName: "test",
+                displayName: nickname,
             },
         },
     });
 
-    const { error: tableerror } = await client.from("UserAccount").insert({
-        auth_id: data.user?.id,
-        email: data.user?.email,
-        account_id: "test12",
-    });
-    console.log(
-        "🚀 ~ const{error:tableerror}=awaitclient.from ~ tableerror:",
-        tableerror
-    );
-
-    if (error?.code === "user_already_exists") {
-        // user already exists errror handle
-
-        return;
+    if (signUpError || !data.user) {
+        return null;
     }
 
-    console.log("🚀 ~ error:", error);
+    const { error: accountError } = await client.from("UserAccount").insert({
+        auth_id: data.user.id,
+        email: data.user.email,
+        account_id: id,
+    });
+
+    if (accountError) {
+        return null;
+    }
+
+    return data.user;
+};
+
+export const checkEmail = async (email: string) => {
+    const client = await createClient();
+
+    const { data } = await client
+        .from("UserAccount")
+        .select()
+        .eq("email", email);
+
+    if (!data || data.length > 0) return false;
+
+    return true;
+};
+
+export const checkId = async (id: string) => {
+    const client = await createClient();
+
+    const { data } = await client
+        .from("UserAccount")
+        .select()
+        .eq("account_id", id);
+
+    if (!data || data.length > 0) return false;
+
+    return true;
 };
 
 export const login = async ({ id, password }: LoginData) => {
@@ -70,7 +96,7 @@ export const logout = async () => {
 
     await client.auth.signOut();
 
-    revalidatePath("/");
+    redirect("/login");
 };
 
 export const findId = async ({ id, password }: LoginData) => {
@@ -90,24 +116,3 @@ export const getUserData = async () => {
 
     return user;
 };
-
-/**
- * user table
- * user-uuid user id user id created_at updated_at
- *
- *
- * auth table
- * id password
- *
- *
- * [register process]
- * 1. user account table에서 id 중복 췤
- * 2. id 췍
- * 3. 괜찮으면 auth table에 id 하고 password 추가
- * 4. 반환 된 auth table에서 얻은 auth id로 user table에 id id 추가!
- *
- * [login process]
- * 1. id, password 조회
- * 2. id로 user table 조회
- * 3. 거기서 얻은 id로 이제 다시 로그인을 시도 => 없으면 로그인 실패
- */

@@ -1,4 +1,6 @@
-import { Bot, UserRound, X } from "lucide-react";
+"use client";
+
+import { useRouter } from "next/navigation";
 
 import {
     Card,
@@ -10,58 +12,85 @@ import {
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 
-import { OpenAI_Messages } from "@/types";
+import { Bot, UserRound, X } from "lucide-react";
 
-type TempData = {
-    roomName: string;
-    lastConversationContent: OpenAI_Messages;
-    lastConversationTime: string;
-};
+import { RoomData } from "@/types";
+import { deleteConversationRoom } from "@/action/conversationRoom";
 
 type Props = {
-    roomData: TempData;
+    roomData: RoomData;
 };
 
 const ConversationRoom = ({ roomData }: Props) => {
+    const router = useRouter();
+
     return (
-        <Card className="relative overflow-hidden dark:shadow-main">
-            <Button className="absolute top-0 right-0 p-0 px-2 text-main">
+        <Card
+            className="relative overflow-hidden dark:shadow-main h-52 hover:cursor-pointer"
+            onClick={(e) => {
+                e.stopPropagation();
+
+                const encoded = btoa(roomData.id);
+
+                router.push(`/conversation/${encoded}`);
+            }}
+        >
+            <Button
+                onClick={(e) => {
+                    e.stopPropagation();
+                    deleteConversationRoom(roomData.id);
+                }}
+                className="absolute top-0 right-0 p-0 px-2 text-main"
+            >
                 <X className="scale-125" />
             </Button>
             <CardHeader className="py-5">
                 <CardTitle className="text-lg truncate">
-                    {roomData.roomName}
+                    {roomData.name}
                 </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
-                {roomData.lastConversationContent.map((conversation, idx) => {
-                    if (idx >= 3) return;
+            {roomData.lastConversationContent.length !== 0 ? (
+                <>
+                    <CardContent className="pb-0 space-y-2 h-3/6">
+                        {roomData.lastConversationContent.map(
+                            (conversation, idx) => {
+                                if (idx >= 3) return;
 
-                    if (typeof conversation.content !== "string") return;
+                                if (typeof conversation.content !== "string")
+                                    return;
 
-                    return (
-                        <div
-                            key={idx}
-                            title={conversation.content}
-                            className={cn(
-                                "flex w-4/5 ",
-                                conversation.role === "user" &&
-                                    "justify-end ml-auto"
-                            )}
-                        >
-                            {conversation.role === "user" ? (
-                                <UserRound className="pb-1 scale-90 text-main shrink-0" />
-                            ) : (
-                                <Bot className="pb-1 text-gray-500 shrink-0" />
-                            )}
-                            <p className="truncate">{conversation.content}</p>
-                        </div>
-                    );
-                })}
-            </CardContent>
-            <CardFooter className="block pb-2 text-sm text-right text-gray-400">
-                {roomData.lastConversationTime}
-            </CardFooter>
+                                return (
+                                    <div
+                                        key={idx}
+                                        title={conversation.content}
+                                        className={cn(
+                                            "flex w-4/5 ",
+                                            conversation.role === "user" &&
+                                                "justify-end ml-auto"
+                                        )}
+                                    >
+                                        {conversation.role === "user" ? (
+                                            <UserRound className="pb-1 scale-90 text-main shrink-0" />
+                                        ) : (
+                                            <Bot className="pb-1 text-gray-500 shrink-0" />
+                                        )}
+                                        <p className="truncate">
+                                            {conversation.content}
+                                        </p>
+                                    </div>
+                                );
+                            }
+                        )}
+                    </CardContent>
+                    <CardFooter className="block pb-2 text-sm text-right text-gray-400">
+                        {roomData.lastConversationTime}
+                    </CardFooter>
+                </>
+            ) : (
+                <CardContent>
+                    <p>이곳을 눌러 대화를 시작해보세요!</p>
+                </CardContent>
+            )}
         </Card>
     );
 };

@@ -8,10 +8,14 @@ const openai = new OpenAI({
 });
 
 export const sendMessageToOpenAI = async (messages: OpenAI_Messages) => {
+    if (messages.length === 0) {
+        return null;
+    }
+
     const completion = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: messages,
     });
 
-    return completion.choices[0].message.content;
+    return completion.choices[0];
 };

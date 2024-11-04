@@ -34,6 +34,41 @@ export type Database = {
   }
   public: {
     Tables: {
+      Conversation: {
+        Row: {
+          content: string
+          created_at: string
+          id: number
+          name: string
+          role: string
+          roomId: string | null
+        }
+        Insert: {
+          content?: string
+          created_at?: string
+          id?: number
+          name?: string
+          role?: string
+          roomId?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: number
+          name?: string
+          role?: string
+          roomId?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Conversation_roomId_fkey"
+            columns: ["roomId"]
+            isOneToOne: false
+            referencedRelation: "ConversationRoom"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ConversationRoom: {
         Row: {
           created_at: string

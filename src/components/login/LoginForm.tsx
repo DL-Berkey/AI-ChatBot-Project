@@ -11,8 +11,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Input } from "../ui/input";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 
-import { login, register } from "@/action/account";
 import { LoaderCircle } from "lucide-react";
+
+import { login } from "@/action/account";
 
 const formSchema = z.object({
     id: z.string().min(6, "아이디는 최소 6글자 이상입니다."),
@@ -116,11 +117,13 @@ const LoginForm = () => {
                 </Form>
             </CardContent>
             <CardFooter className="text-gray-400 justify-center gap-1">
-                <Button className="hover:text-main">
+                <Button className="hover:text-main" asChild>
                     <Link href="/register">회원가입</Link>
                 </Button>
-                <Button className="hover:text-main">
-                    아이디 찾기 / 비밀번호 변경
+                <Button className="hover:text-main" asChild>
+                    <Link href="/find-account">
+                        아이디 찾기 / 비밀번호 변경
+                    </Link>
                 </Button>
             </CardFooter>
         </Card>
