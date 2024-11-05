@@ -2,7 +2,6 @@ import { redirect } from "next/navigation";
 
 import { LayoutGrid } from "lucide-react";
 
-import { OpenAI_Messages } from "@/types";
 import ConversationRoom from "./ConversationRoom";
 import RoomPagination from "./RoomPagination";
 import { getConversationRoomList } from "@/action/conversationRoom";

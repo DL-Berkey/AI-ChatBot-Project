@@ -99,9 +99,9 @@ export const logout = async () => {
     redirect("/login");
 };
 
-export const findId = async ({ id, password }: LoginData) => {
-    const client = await createClient();
-};
+// export const findId = async ({ id, password }: LoginData) => {
+//     const client = await createClient();
+// };
 
 export const getUserData = async () => {
     const client = await createClient();
