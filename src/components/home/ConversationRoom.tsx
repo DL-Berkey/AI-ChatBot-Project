@@ -88,7 +88,9 @@ const ConversationRoom = ({ roomData }: Props) => {
                 </>
             ) : (
                 <CardContent>
-                    <p>이곳을 눌러 대화를 시작해보세요!</p>
+                    <p className="mt-5 text-center text-3xl">
+                        대화 <span className="text-main">시작</span>하기
+                    </p>
                 </CardContent>
             )}
         </Card>
