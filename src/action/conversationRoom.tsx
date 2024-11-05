@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 
 import { getUserData } from "./account";
+import { RoomData } from "@/types";
 
 export const getConversationRoomList = async (page: number) => {
     const client = await createClient();
@@ -26,7 +27,7 @@ export const getConversationRoomList = async (page: number) => {
             lastConversationContent: data.Conversation.slice(-3),
             lastConversationTime: "2024-09-09",
         };
-    });
+    }) as RoomData[];
     return {
         roomList: result,
         count: count ?? 0,
@@ -40,7 +41,7 @@ export const createConversationRoom = async (name: string) => {
 
     if (!user) return;
 
-    const { error } = await client.from("ConversationRoom").insert({
+    await client.from("ConversationRoom").insert({
         name,
         user_id: user.id,
     });

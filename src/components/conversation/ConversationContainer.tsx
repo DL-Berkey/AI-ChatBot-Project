@@ -1,6 +1,6 @@
 "use client";
 
-import { useOptimistic, startTransition } from "react";
+import { useOptimistic, startTransition, useState } from "react";
 
 import { Conversation, ConversationList } from "@/types";
 import { sendMessageToOpenAI } from "@/action/openai";
@@ -18,15 +18,15 @@ type Props = {
 const ConversationContainer = ({ messageData }: Props) => {
     const { roomId, conversationList } = messageData;
 
+    const [pending, setPending] = useState(false);
+
     const [optimisticConversation, setOptimisticConversation] = useOptimistic<
         ConversationList,
         Conversation
     >(conversationList, (messages, message) => [...messages, message]);
 
     const handleSubmit = async (message: string) => {
-        // const message = formData.get("message") as string;
-
-        // const message = e.taget
+        setPending(true);
 
         if (message === "" || !message) return;
 
@@ -63,7 +63,7 @@ const ConversationContainer = ({ messageData }: Props) => {
                 content: reply.content ?? "",
             });
 
-            startTransition(() =>
+            startTransition(() => {
                 setOptimisticConversation({
                     role: reply.role,
                     content: reply.content ?? "",
@@ -71,15 +71,20 @@ const ConversationContainer = ({ messageData }: Props) => {
                     id: 0,
                     created_at: "",
                     name: "",
-                })
-            );
+                });
+            });
         }
+
+        setPending(false);
     };
 
     return (
         <main className="w-5/6 h-[52rem] mx-auto border flex justify-between flex-col">
-            <MessageContainer conversationList={optimisticConversation} />
-            <MessageForm handleSubmit={handleSubmit} />
+            <MessageContainer
+                pending={pending}
+                conversationList={optimisticConversation}
+            />
+            <MessageForm pending={pending} handleSubmit={handleSubmit} />
         </main>
     );
 };

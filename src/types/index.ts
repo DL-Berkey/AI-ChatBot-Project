@@ -9,7 +9,7 @@ export type OpenAI_Messages =
 export type RoomData =
     Database["public"]["Tables"]["ConversationRoom"]["Row"] & {
         Conversation: DatabaseConversation[];
-        lastConversationContent: DatabaseConversation[];
+        lastConversationContent: Conversation[];
         lastConversationTime: string;
     };
 
