@@ -43,7 +43,8 @@ export const getConversationList = async (roomId: string) => {
     const { data, error } = await client
         .from("Conversation")
         .select()
-        .eq("roomId", roomId);
+        .eq("roomId", roomId)
+        .order("created_at", { ascending: true });
 
     if (error || !data) {
         return [];

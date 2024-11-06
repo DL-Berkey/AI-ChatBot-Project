@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 
 import { getUserData } from "./account";
-import { RoomData } from "@/types";
+import { RoomList } from "@/types";
 
 export const getConversationRoomList = async (page: number) => {
     const client = await createClient();
@@ -13,24 +13,22 @@ export const getConversationRoomList = async (page: number) => {
     const from = (page - 1) * 9;
     const to = from + 8;
 
-    const { data, error, count } = await client
-        .from("ConversationRoom")
-        .select("*, Conversation(*)", { count: "exact" })
-        .range(from, to)
-        .order("updated_at", { ascending: false });
+    const { data, error } = await client.rpc("get_last_conversation_content", {
+        from_row: from,
+        take_row: to,
+    });
 
     if (!data || error) return { roomList: [], count: 0 };
 
-    const result = data.map((data) => {
+    const result = data.map((value) => {
         return {
-            ...data,
-            lastConversationContent: data.Conversation.slice(-3),
-            lastConversationTime: "2024-09-09",
+            ...value,
         };
-    }) as RoomData[];
+    }) as RoomList;
+
     return {
         roomList: result,
-        count: count ?? 0,
+        count: data[0].total_rooms,
     };
 };
 

@@ -6,12 +6,20 @@ export type OpenAI_Message = OpenAI.Chat.Completions.ChatCompletionMessageParam;
 export type OpenAI_Messages =
     OpenAI.Chat.Completions.ChatCompletionMessageParam[];
 
-export type RoomData =
-    Database["public"]["Tables"]["ConversationRoom"]["Row"] & {
-        Conversation: DatabaseConversation[];
-        lastConversationContent: Conversation[];
-        lastConversationTime: string;
-    };
+type UpdateProperty<T, K extends keyof T, V> = {
+    [P in keyof T]: P extends K ? V : T[P];
+};
+
+export type DatabaseRoomList =
+    Database["public"]["Functions"]["get_last_conversation_content"]["Returns"];
+
+export type Room = UpdateProperty<
+    DatabaseRoomList extends (infer U)[] ? U : never,
+    "last_conversation_content",
+    Conversation[]
+>;
+
+export type RoomList = Room[];
 
 export type DatabaseConversation =
     Database["public"]["Tables"]["Conversation"]["Row"];

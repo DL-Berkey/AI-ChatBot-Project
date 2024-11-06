@@ -14,15 +14,23 @@ import { cn } from "@/lib/utils";
 
 import { Bot, UserRound, X } from "lucide-react";
 
-import { RoomData } from "@/types";
+import { Room } from "@/types";
 import { deleteConversationRoom } from "@/action/conversationRoom";
+import dayjs from "dayjs";
 
 type Props = {
-    roomData: RoomData;
+    roomData: Room;
 };
 
 const ConversationRoom = ({ roomData }: Props) => {
     const router = useRouter();
+
+    const { id, name, last_conversation_content, last_conversation_time } =
+        roomData;
+
+    const time =
+        last_conversation_time !== "" &&
+        dayjs(last_conversation_time).format("YYYY년 M월 D일");
 
     return (
         <Card
@@ -30,7 +38,7 @@ const ConversationRoom = ({ roomData }: Props) => {
             onClick={(e) => {
                 e.stopPropagation();
 
-                const encoded = btoa(roomData.id);
+                const encoded = btoa(id);
 
                 router.push(`/conversation/${encoded}`);
             }}
@@ -38,52 +46,49 @@ const ConversationRoom = ({ roomData }: Props) => {
             <Button
                 onClick={(e) => {
                     e.stopPropagation();
-                    deleteConversationRoom(roomData.id);
+                    deleteConversationRoom(id);
                 }}
                 className="absolute top-0 right-0 p-0 px-2 text-main"
             >
                 <X className="scale-125" />
             </Button>
             <CardHeader className="py-5">
-                <CardTitle className="text-lg truncate">
-                    {roomData.name}
-                </CardTitle>
+                <CardTitle className="text-lg truncate">{name}</CardTitle>
             </CardHeader>
-            {roomData.lastConversationContent.length !== 0 ? (
+            {last_conversation_content &&
+            last_conversation_content.length !== 0 ? (
                 <>
                     <CardContent className="pb-0 space-y-2 h-3/6">
-                        {roomData.lastConversationContent.map(
-                            (conversation, idx) => {
-                                if (idx >= 3) return;
+                        {last_conversation_content.map((conversation, idx) => {
+                            if (idx >= 3) return;
 
-                                if (typeof conversation.content !== "string")
-                                    return;
+                            if (typeof conversation.content !== "string")
+                                return;
 
-                                return (
-                                    <div
-                                        key={idx}
-                                        title={conversation.content}
-                                        className={cn(
-                                            "flex w-4/5 ",
-                                            conversation.role === "user" &&
-                                                "justify-end ml-auto"
-                                        )}
-                                    >
-                                        {conversation.role === "user" ? (
-                                            <UserRound className="pb-1 scale-90 text-main shrink-0" />
-                                        ) : (
-                                            <Bot className="pb-1 text-gray-500 shrink-0" />
-                                        )}
-                                        <p className="truncate">
-                                            {conversation.content}
-                                        </p>
-                                    </div>
-                                );
-                            }
-                        )}
+                            return (
+                                <div
+                                    key={idx}
+                                    title={conversation.content}
+                                    className={cn(
+                                        "flex w-4/5 ",
+                                        conversation.role === "user" &&
+                                            "justify-end ml-auto"
+                                    )}
+                                >
+                                    {conversation.role === "user" ? (
+                                        <UserRound className="pb-1 scale-90 text-main shrink-0" />
+                                    ) : (
+                                        <Bot className="pb-1 text-gray-500 shrink-0" />
+                                    )}
+                                    <p className="truncate">
+                                        {conversation.content}
+                                    </p>
+                                </div>
+                            );
+                        })}
                     </CardContent>
                     <CardFooter className="block pb-2 text-sm text-right text-gray-400">
-                        {roomData.lastConversationTime}
+                        {time}
                     </CardFooter>
                 </>
             ) : (

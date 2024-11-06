@@ -125,7 +125,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_last_conversation_content: {
+        Args: {
+          from_row: number
+          take_row: number
+        }
+        Returns: {
+          id: string
+          created_at: string
+          updated_at: string
+          user_id: string
+          name: string
+          last_conversation_content: Json
+          last_conversation_time: string
+          total_rooms: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
