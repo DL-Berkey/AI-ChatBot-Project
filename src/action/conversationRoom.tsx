@@ -18,7 +18,6 @@ export const getConversationRoomList = async (page: number) => {
     if (!user) return { roomList: [], count: 0 };
 
     const { data, error } = await client.rpc("get_last_conversation_content", {
-        input_user_id: user.id,
         from_row: from,
         take_row: to,
     });
