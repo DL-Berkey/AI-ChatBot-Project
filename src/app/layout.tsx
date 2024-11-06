@@ -22,7 +22,7 @@ const RootLayout = ({
     return (
         <html lang="ko">
             <body
-                className={`${pretendard.className} w-5/6 mx-auto 2xl:w-3/6 text-semi_black`}
+                className={`${pretendard.className} max-md:w-full w-5/6 mx-auto 2xl:w-3/6 text-semi_black`}
             >
                 <Provider attribute="class" defaultTheme="system" enableSystem>
                     <Header />

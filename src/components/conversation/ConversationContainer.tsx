@@ -79,7 +79,7 @@ const ConversationContainer = ({ messageData }: Props) => {
     };
 
     return (
-        <main className="w-5/6 h-[52rem] mx-auto border flex justify-between flex-col">
+        <main className="max-md:h-[90%] w-5/6 h-[52rem] mx-auto border flex justify-between flex-col">
             <MessageContainer
                 pending={pending}
                 conversationList={optimisticConversation}

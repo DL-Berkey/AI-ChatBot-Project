@@ -43,7 +43,7 @@ const ConversationRoomContainer = async ({ currentPage }: Props) => {
                 <>
                     <div
                         className={
-                            "px-4 h-[43rem] grid grid-cols-3 grid-rows-3 gap-6"
+                            "px-4 space-y-5 md:space-y-0 md:h-[43rem] md:grid md:grid-cols-3 md:grid-rows-3 md:gap-6"
                         }
                     >
                         {roomList.map((data, idx) => {

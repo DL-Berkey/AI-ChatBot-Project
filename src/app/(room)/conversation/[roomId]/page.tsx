@@ -14,14 +14,12 @@ const page = async ({ params }: Props) => {
     const conversationList = await getConversationList(roomId);
 
     return (
-        <div>
-            <ConversationContainer
-                messageData={{
-                    roomId: roomId,
-                    conversationList: conversationList,
-                }}
-            />
-        </div>
+        <ConversationContainer
+            messageData={{
+                roomId: roomId,
+                conversationList: conversationList,
+            }}
+        />
     );
 };
 

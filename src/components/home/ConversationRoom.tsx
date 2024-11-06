@@ -34,7 +34,7 @@ const ConversationRoom = ({ roomData }: Props) => {
 
     return (
         <Card
-            className="relative overflow-hidden dark:shadow-main h-52 hover:cursor-pointer"
+            className="relative mx-auto overflow-hidden max-md:w-full md:w-full dark:shadow-main h-52 hover:cursor-pointer"
             onClick={(e) => {
                 e.stopPropagation();
 
@@ -93,7 +93,7 @@ const ConversationRoom = ({ roomData }: Props) => {
                 </>
             ) : (
                 <CardContent>
-                    <p className="mt-5 text-center text-3xl">
+                    <p className="mt-5 text-3xl text-center">
                         대화 <span className="text-main">시작</span>하기
                     </p>
                 </CardContent>

@@ -22,7 +22,7 @@ const MessageForm = ({ pending, handleSubmit }: Props) => {
 
                 setMessage("");
             }}
-            className="px-5 h-[7%]"
+            className="bg-white max-md:w-full max-md:left-1/2 max-md:-translate-x-1/2 max-md:fixed max-md:bottom-0 dark:bg-background px-5 h-[7%]"
         >
             <div className="flex items-center justify-center h-full gap-4">
                 <Input

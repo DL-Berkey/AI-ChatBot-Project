@@ -54,7 +54,7 @@ const MessageContainer = ({ pending, conversationList }: Props) => {
                     }
                 }, 200);
             }}
-            className="relative space-y-5 px-4  overflow-scroll h-[92%] bg-zinc-100 dark:bg-black py-5"
+            className="max-md:w-full max-md:px-0 relative space-y-5 px-4  overflow-scroll h-[92%] bg-zinc-100 dark:bg-black py-5"
         >
             {conversationList.map((data, idx) => {
                 if (typeof data.content === "string") {
@@ -73,9 +73,10 @@ const MessageContainer = ({ pending, conversationList }: Props) => {
                     variant="default"
                     onClick={() => {
                         if (messageContainerRef.current !== null) {
+                            console.log("hi");
                             messageContainerRef.current.scrollTo({
                                 top: messageContainerRef.current.scrollHeight,
-                                behavior: "smooth",
+                                // behavior: "smooth",
                             });
                         }
                     }}

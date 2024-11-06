@@ -10,7 +10,7 @@ const Header = async () => {
     const userData = await getUserData();
 
     return (
-        <header className="flex items-center justify-between my-4">
+        <header className="max-md:sticky max-md:top-0 max-md:px-7 max-md:z-50 dark:bg-background max-md:w-full flex items-center justify-between my-4 max-md:h-[10%] max-md:my-0 bg-white">
             <div className="text-4xl">
                 <Link href="/">
                     <span>0</span>

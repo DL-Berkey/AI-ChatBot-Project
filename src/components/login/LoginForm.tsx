@@ -46,8 +46,8 @@ const LoginForm = () => {
     };
 
     return (
-        <Card className="mx-auto w-96 mt-28 shadow-main">
-            <CardHeader className="flex-row justify-between items-center space-y-0">
+        <Card className="w-full mx-auto min-[520px]:w-96 mt-28 shadow-main">
+            <CardHeader className="flex-row items-center justify-between space-y-0">
                 <p className="text-2xl">로그인</p>
                 <p className="text-sm text-destructive">
                     {formState.errors && formState.errors.root?.message}
@@ -103,7 +103,7 @@ const LoginForm = () => {
                         <div className="flex justify-center">
                             <Button
                                 type="submit"
-                                className="text-lg bg-main text-white"
+                                className="text-lg text-white bg-main"
                                 disabled={formState.isSubmitting}
                             >
                                 {formState.isSubmitting ? (
@@ -116,7 +116,7 @@ const LoginForm = () => {
                     </form>
                 </Form>
             </CardContent>
-            <CardFooter className="text-gray-400 justify-center gap-1">
+            <CardFooter className="justify-center gap-1 text-gray-400">
                 <Button className="hover:text-main" asChild>
                     <Link href="/register">회원가입</Link>
                 </Button>

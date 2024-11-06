@@ -9,6 +9,9 @@ const config: Config = {
     ],
     theme: {
         extend: {
+            screens: {
+                "520px": "520px",
+            },
             colors: {
                 main: "#4ade80",
                 semi_black: "rgb(55, 65, 81)",
