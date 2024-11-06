@@ -13,7 +13,12 @@ export const getConversationRoomList = async (page: number) => {
     const from = (page - 1) * 9;
     const to = from + 8;
 
+    const user = await getUserData();
+
+    if (!user) return { roomList: [], count: 0 };
+
     const { data, error } = await client.rpc("get_last_conversation_content", {
+        input_user_id: user.id,
         from_row: from,
         take_row: to,
     });

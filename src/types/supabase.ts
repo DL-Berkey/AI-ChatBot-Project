@@ -129,6 +129,7 @@ export type Database = {
         Args: {
           from_row: number
           take_row: number
+          input_user_id: string
         }
         Returns: {
           id: string
