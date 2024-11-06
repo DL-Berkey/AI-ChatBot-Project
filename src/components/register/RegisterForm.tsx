@@ -17,7 +17,13 @@ import { checkEmail, checkId, register } from "@/action/account";
 
 const formSchema = z
     .object({
-        nickname: z.string().min(3, "닉네임은 최소 3글자 이상입니다."),
+        nickname: z
+            .string()
+            .min(3, "닉네임은 최소 3글자 이상입니다.")
+            .regex(
+                /^[a-zA-Z0-9]+$/,
+                "닉네임에는 영문자 및 숫자만 사용할 수 있습니다."
+            ),
         email: z.string().email("이메일을 입력해주세요."),
         id: z.string().min(6, "아이디는 최소 6글자 이상입니다."),
         password: z.string().min(6, "비밀번호는 최소 6글자 이상입니다."),
