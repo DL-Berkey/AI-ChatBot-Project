@@ -59,33 +59,35 @@ const ConversationRoom = ({ roomData }: Props) => {
             last_conversation_content.length !== 0 ? (
                 <>
                     <CardContent className="pb-0 space-y-2 h-3/6">
-                        {last_conversation_content.map((conversation, idx) => {
-                            if (idx >= 3) return;
+                        {[...last_conversation_content]
+                            .reverse()
+                            .map((conversation, idx) => {
+                                if (idx >= 3) return;
 
-                            if (typeof conversation.content !== "string")
-                                return;
+                                if (typeof conversation.content !== "string")
+                                    return;
 
-                            return (
-                                <div
-                                    key={idx}
-                                    title={conversation.content}
-                                    className={cn(
-                                        "flex w-4/5 ",
-                                        conversation.role === "user" &&
-                                            "justify-end ml-auto"
-                                    )}
-                                >
-                                    {conversation.role === "user" ? (
-                                        <UserRound className="pb-1 scale-90 text-main shrink-0" />
-                                    ) : (
-                                        <Bot className="pb-1 text-gray-500 shrink-0" />
-                                    )}
-                                    <p className="truncate">
-                                        {conversation.content}
-                                    </p>
-                                </div>
-                            );
-                        })}
+                                return (
+                                    <div
+                                        key={idx}
+                                        title={conversation.content}
+                                        className={cn(
+                                            "flex w-4/5 ",
+                                            conversation.role === "user" &&
+                                                "justify-end ml-auto"
+                                        )}
+                                    >
+                                        {conversation.role === "user" ? (
+                                            <UserRound className="pb-1 scale-90 text-main shrink-0" />
+                                        ) : (
+                                            <Bot className="pb-1 text-gray-500 shrink-0" />
+                                        )}
+                                        <p className="truncate">
+                                            {conversation.content}
+                                        </p>
+                                    </div>
+                                );
+                            })}
                     </CardContent>
                     <CardFooter className="block pb-2 text-sm text-right text-gray-400">
                         {time}
