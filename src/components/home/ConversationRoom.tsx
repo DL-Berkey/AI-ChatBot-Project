@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import dayjs from "dayjs";
 
 import {
     Card,
@@ -15,8 +16,7 @@ import { cn } from "@/lib/utils";
 import { Bot, UserRound, X } from "lucide-react";
 
 import { Room } from "@/types";
-import { deleteConversationRoom } from "@/action/conversationRoom";
-import dayjs from "dayjs";
+import ConversationDeleteButton from "./ConversationDeleteButton";
 
 type Props = {
     roomData: Room;
@@ -43,15 +43,7 @@ const ConversationRoom = ({ roomData }: Props) => {
                 router.push(`/conversation/${encoded}`);
             }}
         >
-            <Button
-                onClick={(e) => {
-                    e.stopPropagation();
-                    deleteConversationRoom(id);
-                }}
-                className="absolute top-0 right-0 p-0 px-2 text-main"
-            >
-                <X className="scale-125" />
-            </Button>
+            <ConversationDeleteButton room_id={id} />
             <CardHeader className="py-5">
                 <CardTitle className="text-lg truncate">{name}</CardTitle>
             </CardHeader>
