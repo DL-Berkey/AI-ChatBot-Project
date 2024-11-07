@@ -32,7 +32,7 @@ export const getConversationRoomList = async (page: number) => {
 
     return {
         roomList: result,
-        count: data[0].total_rooms,
+        count: data[0] ? data[0].total_rooms : 0,
     };
 };
 
