@@ -19,6 +19,7 @@ export const addConversation = async (
         const { data: conversationData, error } = await client
             .from("Conversation")
             .insert({
+                user_id: user.id,
                 roomId: data.roomId,
                 role: data.role,
                 content: data.content,

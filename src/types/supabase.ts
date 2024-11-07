@@ -42,6 +42,7 @@ export type Database = {
           name: string
           role: string
           roomId: string | null
+          user_id: string
         }
         Insert: {
           content?: string
@@ -50,6 +51,7 @@ export type Database = {
           name?: string
           role?: string
           roomId?: string | null
+          user_id: string
         }
         Update: {
           content?: string
@@ -58,6 +60,7 @@ export type Database = {
           name?: string
           role?: string
           roomId?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -66,6 +69,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "ConversationRoom"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Conversation_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "UserAccount"
+            referencedColumns: ["auth_id"]
           },
         ]
       }
@@ -100,6 +110,7 @@ export type Database = {
           created_at: string
           email: string
           id: number
+          nickname: string
           updated_at: string
         }
         Insert: {
@@ -108,6 +119,7 @@ export type Database = {
           created_at?: string
           email?: string
           id?: number
+          nickname?: string
           updated_at?: string
         }
         Update: {
@@ -116,6 +128,7 @@ export type Database = {
           created_at?: string
           email?: string
           id?: number
+          nickname?: string
           updated_at?: string
         }
         Relationships: []
@@ -140,6 +153,13 @@ export type Database = {
           last_conversation_time: string
           total_rooms: number
         }[]
+      }
+      update_user_password: {
+        Args: {
+          p_auth_id: string
+          p_new_password: string
+        }
+        Returns: undefined
       }
     }
     Enums: {
