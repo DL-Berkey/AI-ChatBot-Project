@@ -8,10 +8,13 @@ import { Card, CardContent, CardDescription, CardHeader } from "../ui/card";
 import { Input } from "../ui/input";
 
 import { createConversationRoom } from "@/action/conversationRoom";
+import { useState } from "react";
 
 const NewChatButton = ({ className }: ButtonProps) => {
+    const [open, setOpen] = useState(false);
+
     return (
-        <Popover>
+        <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button
                     className={cn(
@@ -42,6 +45,8 @@ const NewChatButton = ({ className }: ButtonProps) => {
                                 createConversationRoom(name).then(() => {
                                     input.value = "";
                                 });
+
+                                setOpen(false);
                             }}
                             className="flex gap-2"
                         >
