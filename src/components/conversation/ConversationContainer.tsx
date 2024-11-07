@@ -38,6 +38,7 @@ const ConversationContainer = ({ messageData }: Props) => {
 
         startTransition(() =>
             setOptimisticConversation({
+                user_id: "",
                 id: 0,
                 created_at: "",
                 name: "",
@@ -65,6 +66,7 @@ const ConversationContainer = ({ messageData }: Props) => {
 
             startTransition(() => {
                 setOptimisticConversation({
+                    user_id: "",
                     role: reply.role,
                     content: reply.content ?? "",
                     roomId,
