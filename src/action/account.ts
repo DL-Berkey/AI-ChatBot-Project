@@ -115,7 +115,12 @@ export const isExistingUser = async (nickname: string, email: string) => {
 
     if (!data || data.length === 0 || error) return null;
 
-    return data[0].auth_id;
+    const maskingAcocuntId = data[0].account_id.slice(0, -3) + "***";
+
+    return {
+        auth_id: data[0].auth_id,
+        account_id: maskingAcocuntId,
+    };
 };
 
 export const changePassword = async ({
@@ -129,15 +134,15 @@ export const changePassword = async ({
 }) => {
     const client = await createClient();
 
-    const auth_id = await isExistingUser(nickname, email);
+    // TODO: 서버에서만 auth_id와 account id가 노출 되게 코드 변경
+    const user = await isExistingUser(nickname, email);
 
-    if (!auth_id) return null;
+    if (!user) return null;
 
     const { error } = await client.rpc("update_user_password", {
-        p_auth_id: auth_id,
+        p_auth_id: user.auth_id,
         p_new_password: password,
     });
-    console.log("🚀 ~ error:", error);
 
     if (error) return false;
 
