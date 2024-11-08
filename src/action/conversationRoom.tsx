@@ -24,14 +24,10 @@ export const getConversationRoomList = async (page: number) => {
 
     if (!data || error) return { roomList: [], count: 0 };
 
-    const result = data.map((value) => {
-        return {
-            ...value,
-        };
-    }) as RoomList;
+    const roomList = data as RoomList;
 
     return {
-        roomList: result,
+        roomList,
         count: data[0] ? data[0].total_rooms : 0,
     };
 };

@@ -1,9 +1,8 @@
 import { isValidElement } from "react";
-import dayjs from "dayjs";
 import Markdown from "react-markdown";
 
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
-import { cn } from "@/lib/utils";
+import { cn, getFormattedTime } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 import { Bot, ClipboardPlus } from "lucide-react";
@@ -17,10 +16,7 @@ type Props = {
 const MessageCard = ({ message }: Props) => {
     if (typeof message.content !== "string") return null;
 
-    const time =
-        message.created_at !== ""
-            ? dayjs(message.created_at).format("YYYY년 M월 D일 H시 m분")
-            : dayjs().format("YYYY년 M월 D일 H시 m분");
+    const time = getFormattedTime(message.created_at);
 
     return (
         <Card
@@ -40,12 +36,10 @@ const MessageCard = ({ message }: Props) => {
                 <Markdown
                     components={{
                         code: (props) => (
-                            <>
-                                <code
-                                    className="px-1 font-sans text-lg underline rounded underline-offset-4 decoration-main "
-                                    {...props}
-                                />
-                            </>
+                            <code
+                                className="px-1 font-sans text-lg underline rounded underline-offset-4 decoration-main "
+                                {...props}
+                            />
                         ),
                         pre: ({ children, ...node }) => {
                             let isCopyable = false;

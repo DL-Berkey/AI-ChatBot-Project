@@ -1,5 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
-import { NextResponse, type NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { CookieToSet } from "./server";
 
@@ -35,16 +35,31 @@ export const updateSession = async (request: NextRequest) => {
         data: { user },
     } = await supabase.auth.getUser();
 
-    if (
-        !user &&
-        !request.nextUrl.pathname.startsWith("/login") &&
-        !request.nextUrl.pathname.startsWith("/auth") &&
-        !request.nextUrl.pathname.startsWith("/register") &&
-        !request.nextUrl.pathname.startsWith("/find-account")
-    ) {
-        // no user, potentially respond by redirecting the user to the login page
+    const pathList = [
+        "/login",
+        "/register",
+        "/find-account",
+        "/conversation/guest",
+    ];
+
+    const isAuthenticationPath = pathList.some((path) =>
+        request.nextUrl.pathname.startsWith(path)
+    );
+
+    // authentication 라우터 제한
+    if (user && isAuthenticationPath) {
         const url = request.nextUrl.clone();
-        url.pathname = "/login";
+
+        url.pathname = "/";
+
+        return NextResponse.redirect(url);
+    }
+
+    if (!user && !isAuthenticationPath) {
+        const url = request.nextUrl.clone();
+
+        url.pathname = "/conversation/guest";
+
         return NextResponse.redirect(url);
     }
 
