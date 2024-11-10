@@ -37,7 +37,7 @@ const LoginForm = () => {
         const result = await login(values);
 
         if (result) {
-            router.replace("/");
+            router.back();
         } else {
             form.setError("root", {
                 message: "아이디 또는 비밀번호가 일치하지 않습니다.",

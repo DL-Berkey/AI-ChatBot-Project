@@ -24,6 +24,8 @@ export const register = async ({
     });
 
     if (signUpError || !data.user) {
+        console.log("🚀 ~ signUpError:", signUpError);
+
         return null;
     }
 
@@ -39,6 +41,26 @@ export const register = async ({
     }
 
     return data.user;
+};
+
+export const verifyOtp = async (email: string, otpCode: string) => {
+    const client = await createClient();
+
+    const { data, error } = await client.auth.verifyOtp({
+        type: "signup",
+        email: email,
+        token: otpCode,
+    });
+
+    if (data.user !== null) {
+        return true;
+    }
+
+    if (error) {
+        return false;
+    }
+
+    return false;
 };
 
 export const checkEmail = async (email: string) => {
@@ -99,10 +121,6 @@ export const logout = async () => {
 
     redirect("/login");
 };
-
-// export const findId = async ({ id, password }: LoginData) => {
-//     const client = await createClient();
-// };
 
 export const isExistingUser = async (nickname: string, email: string) => {
     const client = await createClient();

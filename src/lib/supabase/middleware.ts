@@ -35,16 +35,16 @@ export const updateSession = async (request: NextRequest) => {
         data: { user },
     } = await supabase.auth.getUser();
 
-    const pathList = [
+    const isAuthenticationPath = ["/login", "/register", "/find-account"].some(
+        (path) => request.nextUrl.pathname.startsWith(path)
+    );
+
+    const isUnAuthenticationPath = [
         "/login",
         "/register",
         "/find-account",
         "/conversation/guest",
-    ];
-
-    const isAuthenticationPath = pathList.some((path) =>
-        request.nextUrl.pathname.startsWith(path)
-    );
+    ].some((path) => request.nextUrl.pathname.startsWith(path));
 
     // authentication 라우터 제한
     if (user && isAuthenticationPath) {
@@ -55,7 +55,7 @@ export const updateSession = async (request: NextRequest) => {
         return NextResponse.redirect(url);
     }
 
-    if (!user && !isAuthenticationPath) {
+    if (!user && !isUnAuthenticationPath) {
         const url = request.nextUrl.clone();
 
         url.pathname = "/conversation/guest";

@@ -1,14 +1,21 @@
 "use client";
 
+import Link from "next/link";
+import { useState } from "react";
 import { Button, ButtonProps } from "../ui/button";
 
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Card, CardContent, CardDescription, CardHeader } from "../ui/card";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+} from "../ui/card";
 import { Input } from "../ui/input";
 
 import { createConversationRoom } from "@/action/conversationRoom";
-import { useState } from "react";
 
 const NewChatButton = ({ className }: ButtonProps) => {
     const [open, setOpen] = useState(false);
@@ -33,16 +40,16 @@ const NewChatButton = ({ className }: ButtonProps) => {
                             한번 만든 대화방은 이름을 바꿀 수 없습니다.
                         </CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="pb-1">
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
 
                                 const input = e.currentTarget
                                     .elements[0] as HTMLInputElement;
-                                const name = input.value;
+                                const roomName = input.value;
 
-                                createConversationRoom(name).then(() => {
+                                createConversationRoom(roomName).then(() => {
                                     input.value = "";
                                 });
 
@@ -56,6 +63,13 @@ const NewChatButton = ({ className }: ButtonProps) => {
                             </Button>
                         </form>
                     </CardContent>
+                    <CardFooter className="pb-0 justify-center">
+                        <Button variant="link" className="text-gray-400">
+                            <Link href="/conversation/guest">
+                                익명으로 대화하기
+                            </Link>
+                        </Button>
+                    </CardFooter>
                 </Card>
             </PopoverContent>
         </Popover>

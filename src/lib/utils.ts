@@ -6,12 +6,12 @@ export const cn = (...inputs: ClassValue[]) => {
     return twMerge(clsx(inputs));
 };
 
-export const getFormattedTime = (time: string) => {
+export const getFormattedTime = (time: string | "now") => {
     const data = dayjs(time);
 
     if (data.isValid()) {
         return data.format("YYYY년 M월 D일 H시 m분");
-    } else {
-        dayjs().format("YYYY년 M월 D일 H시 m분");
     }
+
+    return dayjs().format("YYYY년 M월 D일 H시 m분");
 };

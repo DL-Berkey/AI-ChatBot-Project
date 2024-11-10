@@ -5,6 +5,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { encode, trim } from "url-safe-base64";
 
 import { Button } from "../ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
@@ -91,7 +92,11 @@ const RegisterForm = () => {
         const result = await register(values);
 
         if (result) {
-            router.replace("/register/notice");
+            const encodedEmail = trim(
+                encode(btoa(form.getValues("email").replace(/\./g, "dot")))
+            );
+
+            router.replace(`/register/verify/${encodedEmail}`);
         } else {
             form.setError("root", {
                 message: "알 수 없는 이유로 회원가입에 실패했습니다.",
@@ -248,8 +253,11 @@ const RegisterForm = () => {
                         <div className="flex justify-center">
                             <Button
                                 type="submit"
+                                disabled={
+                                    formState.isSubmitting ||
+                                    !(isAvailable.email && isAvailable.id)
+                                }
                                 className="text-lg bg-main text-white"
-                                disabled={formState.isSubmitting}
                             >
                                 {formState.isSubmitting ? (
                                     <LoaderCircle className="animate-spin" />
