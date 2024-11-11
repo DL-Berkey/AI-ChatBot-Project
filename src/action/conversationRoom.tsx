@@ -32,19 +32,26 @@ export const getConversationRoomList = async (page: number) => {
     };
 };
 
-export const createConversationRoom = async (name: string) => {
+export const createConversationRoom = async (roomName: string) => {
     const client = await createClient();
 
     const user = await getUserData();
 
-    if (!user) return;
+    if (!user) return null;
 
-    await client.from("ConversationRoom").insert({
-        name,
-        user_id: user.id,
-    });
+    const { data, error } = await client
+        .from("ConversationRoom")
+        .insert({
+            name: roomName,
+            user_id: user.id,
+        })
+        .select();
+
+    if (error) return null;
 
     revalidatePath("/");
+
+    return data;
 };
 
 export const deleteConversationRoom = async (roomId: string) => {

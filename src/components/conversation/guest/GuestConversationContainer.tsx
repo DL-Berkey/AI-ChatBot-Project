@@ -4,6 +4,7 @@ import { startTransition, useState } from "react";
 
 import { ConversationList } from "@/types";
 import { sendMessageToOpenAI } from "@/action/openai";
+import { getFormattedTime } from "@/lib/utils";
 import {
     addConversationToSession,
     getConversationListFromSession,
@@ -11,7 +12,6 @@ import {
 import MessageContainer from "../MessageContainer";
 import MessageForm from "../MessageForm";
 
-// TODO: middle ware에서 비로그인만 여기 들어올 수 있게 코드 추가!
 const GuestConversationContainer = () => {
     const [pending, setPending] = useState(false);
 
@@ -27,7 +27,7 @@ const GuestConversationContainer = () => {
         addConversationToSession({
             user_id: "guest",
             id: 0,
-            created_at: "",
+            created_at: getFormattedTime("now"),
             name: "guest",
             role: "user",
             content: message,
@@ -41,7 +41,7 @@ const GuestConversationContainer = () => {
                     {
                         user_id: "guest",
                         id: 0,
-                        created_at: "",
+                        created_at: getFormattedTime("now"),
                         name: "guest",
                         role: "user",
                         content: message,
@@ -64,7 +64,7 @@ const GuestConversationContainer = () => {
             addConversationToSession({
                 user_id: "guest",
                 id: 0,
-                created_at: "",
+                created_at: getFormattedTime("now"),
                 name: "guest",
                 role: reply.role,
                 content: reply.content ?? "",
@@ -78,7 +78,7 @@ const GuestConversationContainer = () => {
                         {
                             user_id: "guest",
                             id: 0,
-                            created_at: "",
+                            created_at: getFormattedTime("now"),
                             name: "guest",
                             role: reply.role,
                             content: reply.content ?? "",
@@ -93,7 +93,7 @@ const GuestConversationContainer = () => {
     };
 
     return (
-        <main className="max-md:h-[90%] w-5/6 h-[52rem] mx-auto border flex justify-between flex-col">
+        <main className="relative max-md:h-[90%] w-5/6 h-[52rem] mx-auto border flex justify-between flex-col">
             <MessageContainer
                 pending={pending}
                 conversationList={conversation}

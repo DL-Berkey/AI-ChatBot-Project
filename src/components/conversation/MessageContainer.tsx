@@ -73,7 +73,6 @@ const MessageContainer = ({ pending, conversationList }: Props) => {
                     variant="default"
                     onClick={() => {
                         if (messageContainerRef.current !== null) {
-                            console.log("hi");
                             messageContainerRef.current.scrollTo({
                                 top: messageContainerRef.current.scrollHeight,
                                 // behavior: "smooth",
