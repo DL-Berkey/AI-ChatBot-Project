@@ -24,8 +24,6 @@ export const register = async ({
     });
 
     if (signUpError || !data.user) {
-        console.log("🚀 ~ signUpError:", signUpError);
-
         return null;
     }
 
@@ -141,25 +139,38 @@ export const isExistingUser = async (nickname: string, email: string) => {
     };
 };
 
-export const changePassword = async ({
-    nickname,
-    email,
-    password,
-}: {
+export const sendPasswordChangingLink = async (values: {
+    redirectURL: string;
     nickname: string;
     email: string;
-    password: string;
 }) => {
     const client = await createClient();
+
+    const { redirectURL, nickname, email } = values;
 
     // TODO: 서버에서만 auth_id와 account id가 노출 되게 코드 변경
     const user = await isExistingUser(nickname, email);
 
-    if (!user) return null;
+    if (!user) return false;
 
-    const { error } = await client.rpc("update_user_password", {
-        p_auth_id: user.auth_id,
-        p_new_password: password,
+    const { data, error } = await client.auth.resetPasswordForEmail(email, {
+        redirectTo: `${redirectURL}/api/auth`,
+    });
+
+    if (error) return false;
+
+    return true;
+};
+
+export const changePassword = async (password: string) => {
+    const client = await createClient();
+
+    const { error: sessionError } = await client.auth.getUser();
+
+    if (sessionError) return false;
+
+    const { error } = await client.auth.updateUser({
+        password,
     });
 
     if (error) return false;

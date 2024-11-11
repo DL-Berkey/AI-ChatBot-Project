@@ -35,15 +35,16 @@ export const updateSession = async (request: NextRequest) => {
         data: { user },
     } = await supabase.auth.getUser();
 
-    const isAuthenticationPath = ["/login", "/register", "/find-account"].some(
+    const isAuthenticationPath = ["/login", "/register", "/account"].some(
         (path) => request.nextUrl.pathname.startsWith(path)
     );
 
     const isUnAuthenticationPath = [
         "/login",
         "/register",
-        "/find-account",
+        "/account",
         "/conversation/guest",
+        "/api/auth",
     ].some((path) => request.nextUrl.pathname.startsWith(path));
 
     // authentication 라우터 제한

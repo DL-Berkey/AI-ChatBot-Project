@@ -1,7 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,7 +12,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 
 import { LoaderCircle } from "lucide-react";
 
-import { isExistingUser } from "@/action/account";
+import { sendPasswordChangingLink } from "@/action/account";
+import SecondStepContent from "./SecondStepContent";
 
 const formSchema = z.object({
     nickname: z
@@ -27,10 +26,8 @@ const formSchema = z.object({
     email: z.string().email("이메일을 입력해주세요."),
 });
 
-const FindIdTabCard = () => {
-    const [accountId, setAccountId] = useState<string | null>(null);
-
-    const router = useRouter();
+const ChangePasswordTabcard = () => {
+    const [nextStep, setNextStep] = useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -43,29 +40,39 @@ const FindIdTabCard = () => {
     const formState = form.formState;
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        const isValidEmail = await form.trigger("email");
-        const isValidNickname = await form.trigger("nickname");
+        const url = window.location.origin;
 
-        if (!isValidEmail || !isValidNickname) return;
+        const result = await sendPasswordChangingLink({
+            redirectURL: url,
+            nickname: values.nickname,
+            email: values.email,
+        });
 
-        const result = await isExistingUser(values.nickname, values.email);
-
-        if (!result) {
-            form.setError("nickname", {
+        if (result) {
+            setNextStep(true);
+        } else {
+            form.setError("root", {
                 message: "존재하지 않는 유저입니다.",
             });
-        } else {
-            setAccountId(result.account_id);
         }
     };
 
     return (
         <Card>
-            <CardHeader>
-                <CardTitle>아이디 찾기</CardTitle>
+            <CardHeader className="flex-row justify-between items-center space-y-0">
+                <p className="text-2xl">비밀번호 변경</p>
+                <p className="text-sm text-destructive">
+                    {formState.errors && formState.errors.root?.message}
+                </p>
             </CardHeader>
             <CardContent className="space-y-2">
-                {accountId === null ? (
+                {nextStep ? (
+                    <SecondStepContent>
+                        회원가입 시 입력한 이메일로 비밀번호 변경 링크를 포함한
+                        메일을 전송했습니다. <br />
+                        이메일함을 확인해주세요.
+                    </SecondStepContent>
+                ) : (
                     <Form {...form}>
                         <form
                             onSubmit={form.handleSubmit(onSubmit)}
@@ -123,36 +130,16 @@ const FindIdTabCard = () => {
                                     {formState.isSubmitting ? (
                                         <LoaderCircle className="animate-spin" />
                                     ) : (
-                                        "아이디 찾기"
+                                        "비밀번호 변경"
                                     )}
                                 </Button>
                             </div>
                         </form>
                     </Form>
-                ) : (
-                    <>
-                        <div className="text-center mb-10">
-                            <span>{`${form.getValues(
-                                "nickname"
-                            )}님의 아이디는 `}</span>
-                            <span className="text-main font-semibold">
-                                {accountId}
-                            </span>
-                            <span>입니다.</span>
-                        </div>
-                        <div className="flex justify-center">
-                            <Button
-                                className="text-lg bg-main text-white"
-                                asChild
-                            >
-                                <Link href="/login">로그인으로 가기</Link>
-                            </Button>
-                        </div>
-                    </>
                 )}
             </CardContent>
         </Card>
     );
 };
 
-export default FindIdTabCard;
+export default ChangePasswordTabcard;

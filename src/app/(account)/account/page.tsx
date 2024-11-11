@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import FindIdTabCard from "@/components/find-account/FindIdTabCard";
-import ChangePasswordTabcard from "@/components/find-account/ChangePasswordTabcard";
+import FindIdTabCard from "@/components/account/FindIdTabCard";
+import ChangePasswordTabcard from "@/components/account/ChangePasswordTabcard";
 
 const page = () => {
     return (

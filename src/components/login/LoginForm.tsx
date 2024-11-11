@@ -121,9 +121,7 @@ const LoginForm = () => {
                     <Link href="/register">회원가입</Link>
                 </Button>
                 <Button className="hover:text-main" asChild>
-                    <Link href="/find-account">
-                        아이디 찾기 / 비밀번호 변경
-                    </Link>
+                    <Link href="/account">아이디 찾기 / 비밀번호 변경</Link>
                 </Button>
             </CardFooter>
         </Card>
