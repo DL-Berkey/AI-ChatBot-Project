@@ -755,6 +755,11 @@
   resolved "https://registry.yarnpkg.com/@types/unist/-/unist-2.0.11.tgz#11af57b127e32487774841f7a4e54eab166d03c4"
   integrity sha512-CmBKiL6NNo/OqgmMn95Fk9Whlp2mtvIv+KNpQKN2F4SjvrEesubTRWGYSg+BnWZOnlCaSTU1sMpsBOzgbYhnsA==
 
+"@types/web-animations-js@^2.2.16":
+  version "2.2.16"
+  resolved "https://registry.yarnpkg.com/@types/web-animations-js/-/web-animations-js-2.2.16.tgz#fd84c49a7a2f148b588ba8b372496162b427742f"
+  integrity sha512-ATELeWMFwj8eQiH0KmvsCl1V2lu/qx/CjOBmv4ADSZS5u8r4reMyjCXtxG7khqyiwH3IOMNdrON/Ugn94OUcRA==
+
 "@types/ws@^8.5.10":
   version "8.5.12"
   resolved "https://registry.yarnpkg.com/@types/ws/-/ws-8.5.12.tgz#619475fe98f35ccca2a2f6c137702d85ec247b7e"
@@ -3872,6 +3877,20 @@ typed-array-length@^1.0.6:
     has-proto "^1.0.3"
     is-typed-array "^1.1.13"
     possible-typed-array-names "^1.0.0"
+
+typeit-react@^2.7.7:
+  version "2.7.7"
+  resolved "https://registry.yarnpkg.com/typeit-react/-/typeit-react-2.7.7.tgz#d7c6b1fa75c3c6041dfaef3ac8215ca70799af12"
+  integrity sha512-vZAjdCFKNOvcEXZnL+45D2QJa8fqtTgFysBvh0N5klQA5nwhNUYDLpZlSut2MJNUiQ5IhYk3AIX7e0pUV8+eEA==
+  dependencies:
+    typeit "^8.8.7"
+
+typeit@^8.8.7:
+  version "8.8.7"
+  resolved "https://registry.yarnpkg.com/typeit/-/typeit-8.8.7.tgz#6b6533c2c17dffa86924647f818db378ef328a1d"
+  integrity sha512-sSVpy+cjeFP6Z+fZqiHzUSShg5yYFeJEt/Qut/bX945+Axyq+Yq+GPOuuk+sofoccSv8nNX/ibOOHkbki2mEpg==
+  dependencies:
+    "@types/web-animations-js" "^2.2.16"
 
 typescript@^5:
   version "5.6.3"

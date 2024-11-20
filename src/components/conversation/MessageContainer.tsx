@@ -25,7 +25,6 @@ const MessageContainer = ({ pending, conversationList }: Props) => {
         if (messageContainerRef.current !== null) {
             messageContainerRef.current.scrollTo({
                 top: messageContainerRef.current.scrollHeight,
-                behavior: "smooth",
             });
         }
     }, [conversationList.length]);
@@ -54,11 +53,21 @@ const MessageContainer = ({ pending, conversationList }: Props) => {
                     }
                 }, 200);
             }}
-            className="max-md:w-full max-md:px-0 relative space-y-5 px-4  overflow-scroll h-[92%] bg-zinc-100 dark:bg-black py-5"
+            className="max-h-[90dvh] max-md:w-full max-md:px-0 relative space-y-5 px-4  overflow-scroll h-[92%] bg-zinc-100 dark:bg-black py-5"
         >
             {conversationList.map((data, idx) => {
                 if (typeof data.content === "string") {
-                    return <MessageCard key={idx} message={data} />;
+                    const hasTypingEffect =
+                        idx === conversationList.length - 1 &&
+                        data.role === "assistant";
+
+                    return (
+                        <MessageCard
+                            key={idx}
+                            typingEffect={hasTypingEffect}
+                            message={data}
+                        />
+                    );
                 }
             })}
             {pending && (
@@ -75,7 +84,6 @@ const MessageContainer = ({ pending, conversationList }: Props) => {
                         if (messageContainerRef.current !== null) {
                             messageContainerRef.current.scrollTo({
                                 top: messageContainerRef.current.scrollHeight,
-                                // behavior: "smooth",
                             });
                         }
                     }}

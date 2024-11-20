@@ -46,11 +46,12 @@ const ConversationRoomContainer = async ({ currentPage }: Props) => {
                             "px-4 space-y-5 md:space-y-0 md:h-[43rem] md:grid md:grid-cols-3 md:grid-rows-3 md:gap-6"
                         }
                     >
-                        {roomList.map((data, idx) => {
-                            if (idx > 8) return;
-
+                        {roomList.slice(0, 9).map((data) => {
                             return (
-                                <ConversationRoom key={idx} roomData={data} />
+                                <ConversationRoom
+                                    key={data.id}
+                                    roomData={data}
+                                />
                             );
                         })}
                     </div>

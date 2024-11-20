@@ -1,8 +1,8 @@
 "use client";
 
-import { startTransition, useState } from "react";
+import { startTransition, useOptimistic, useState } from "react";
 
-import { ConversationList } from "@/types";
+import { Conversation, ConversationList } from "@/types";
 import { sendMessageToOpenAI } from "@/action/openai";
 import { getFormattedTime } from "@/lib/utils";
 import {
@@ -15,9 +15,13 @@ import MessageForm from "../MessageForm";
 const GuestConversationContainer = () => {
     const [pending, setPending] = useState(false);
 
-    const [conversation, setConversation] = useState<ConversationList>(() =>
-        getConversationListFromSession()
-    );
+    const [optimisticConversation, setOptimisticConversation] = useOptimistic<
+        ConversationList,
+        Conversation
+    >(getConversationListFromSession(), (messages, message) => [
+        ...messages,
+        message,
+    ]);
 
     const handleSubmit = async (message: string) => {
         setPending(true);
@@ -34,24 +38,7 @@ const GuestConversationContainer = () => {
             roomId: "guest room",
         });
 
-        startTransition(() =>
-            setConversation((prev) => {
-                return [
-                    ...prev,
-                    {
-                        user_id: "guest",
-                        id: 0,
-                        created_at: getFormattedTime("now"),
-                        name: "guest",
-                        role: "user",
-                        content: message,
-                        roomId: "guest room",
-                    },
-                ];
-            })
-        );
-
-        const context = conversation.slice(-10);
+        const context = optimisticConversation.slice(-10);
 
         const replyMessage = await sendMessageToOpenAI([
             ...context,
@@ -72,19 +59,14 @@ const GuestConversationContainer = () => {
             });
 
             startTransition(() => {
-                setConversation((prev) => {
-                    return [
-                        ...prev,
-                        {
-                            user_id: "guest",
-                            id: 0,
-                            created_at: getFormattedTime("now"),
-                            name: "guest",
-                            role: reply.role,
-                            content: reply.content ?? "",
-                            roomId: "guest room",
-                        },
-                    ];
+                setOptimisticConversation({
+                    user_id: "guest",
+                    id: 0,
+                    created_at: getFormattedTime("now"),
+                    name: "guest",
+                    role: reply.role,
+                    content: reply.content ?? "",
+                    roomId: "guest room",
                 });
             });
         }
@@ -93,10 +75,10 @@ const GuestConversationContainer = () => {
     };
 
     return (
-        <main className="relative max-md:h-[90%] w-5/6 h-[52rem] mx-auto border flex justify-between flex-col">
+        <main className="max-md:h-[90%] w-5/6 mx-auto border flex justify-between flex-col">
             <MessageContainer
                 pending={pending}
-                conversationList={conversation}
+                conversationList={optimisticConversation}
             />
             <MessageForm pending={pending} handleSubmit={handleSubmit} />
         </main>

@@ -44,9 +44,7 @@ export const addConversation = async (
 // export const addGuestConversationList = async (
 //     guestConversationList: ConversationList
 // ) => {
-//     console.log("hi");
 //     const roomId = await createConversationRoom("게스트 채팅방");
-//     console.log("🚀 ~ addGuestConversationList ~ roomId:", roomId);
 
 //     const jobArray = [];
 // };
