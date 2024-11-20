@@ -46,20 +46,23 @@ const MessageContainer = ({ pending, conversationList }: Props) => {
                 // 잦은 호출을 방지하기 위한 debounce 적용 / 성능 향상 효과는 미비
                 debounceTimeoutID.current = setTimeout(() => {
                     if (
-                        target.scrollTop ===
-                        target.scrollHeight - target.clientHeight
+                        Math.abs(
+                            target.scrollTop -
+                                (target.scrollHeight - target.clientHeight)
+                        ) < 1
                     ) {
                         setIsScrolled(false);
                     }
                 }, 200);
             }}
-            className="max-h-[90dvh] max-md:w-full max-md:px-0 relative space-y-5 px-4  overflow-scroll h-[92%] bg-zinc-100 dark:bg-black py-5"
+            className="h-[85dvh] max-h-[90dvh] max-md:w-full max-md:px-0 relative space-y-5 px-4  overflow-scroll bg-zinc-100 dark:bg-black py-5"
         >
             {conversationList.map((data, idx) => {
                 if (typeof data.content === "string") {
                     const hasTypingEffect =
                         idx === conversationList.length - 1 &&
-                        data.role === "assistant";
+                        data.role === "assistant" &&
+                        idx !== 0;
 
                     return (
                         <MessageCard
@@ -85,6 +88,8 @@ const MessageContainer = ({ pending, conversationList }: Props) => {
                             messageContainerRef.current.scrollTo({
                                 top: messageContainerRef.current.scrollHeight,
                             });
+
+                            setIsScrolled(false);
                         }
                     }}
                     className="fixed translate-x-1/2 bottom-32 right-1/2 bg-main"
